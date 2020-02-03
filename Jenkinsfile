@@ -28,7 +28,7 @@ pipeline {
             steps {
                 echo '=== Building Petclinic Docker Image ==='
                 script {
-                    app = docker.build("645385727312.dkr.ecr.us-east-1.amazonaws.com/spinnaker-ecr")
+                    app = docker.build('ibuchh/petclinic-spinnaker-jenkins')
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 echo '=== Pushing Petclinic Docker Image ==='
                 script {
-                    docker.withRegistry("https://645385727312.dkr.ecr.us-east-1.amazonaws.com") {
+                    docker.withRegistry('https://hub.docker.com/repository/docker/user555/spinnaker', 'dockerHubCredentials') {
                         app.push("$SHORT_COMMIT")
                         app.push("latest")
                     }
@@ -49,7 +49,8 @@ pipeline {
         stage('Remove local images') {
             steps {
                 echo '=== Delete the local docker images ==='
-                sh("docker rmi -f 645385727312.dkr.ecr.us-east-1.amazonaws.com/spinnaker-ecr:latest || :")
+                sh("docker rmi -f ibuchh/petclinic-spinnaker-jenkins:latest || :")
+                sh("docker rmi -f ibuchh/petclinic-spinnaker-jenkins:$SHORT_COMMIT || :")
             }
         }
     }
