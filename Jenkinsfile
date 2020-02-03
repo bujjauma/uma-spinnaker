@@ -41,7 +41,7 @@ pipeline {
                 script {
                     GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
                     SHORT_COMMIT = "${GIT_COMMIT_HASH[0..7]}"
-                    docker.withRegistry('645385727312.dkr.ecr.us-east-1.amazonaws.com/jenkins-spinnaker', 'dockerHubCredentials') {
+                    docker.withRegistry('645385727312.dkr.ecr.us-east-1.amazonaws.com/spinnaker-ecr:latest', 'dockerHubCredentials') {
                         app.push("$SHORT_COMMIT")
                         app.push("latest")
                     }
